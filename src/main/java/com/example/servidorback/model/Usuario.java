@@ -16,7 +16,6 @@ public class Usuario {
     private String nome;
     private boolean admin;
 
-    @Column(unique = true)
     private String senha;
 
     @OneToMany(mappedBy = "pedinte")

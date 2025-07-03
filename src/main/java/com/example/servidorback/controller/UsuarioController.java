@@ -3,6 +3,7 @@ package com.example.servidorback.controller;
 
 import com.example.servidorback.DTO.UsuarioDTO;
 import com.example.servidorback.DTO.UsuarioLoginDTO;
+import com.example.servidorback.DTO.UsuarioNovoDTO;
 import com.example.servidorback.model.Usuario;
 import com.example.servidorback.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
@@ -29,25 +30,42 @@ public class UsuarioController {
     }
 
     @PostMapping("/registrarUsuario")
-    public Usuario novoUsuario(UsuarioDTO usuarioDTO) {
-        Usuario usuario = modelMapper.map(usuarioDTO, Usuario.class);
+    public Usuario novoUsuario(@RequestBody UsuarioNovoDTO usuarioDTO) {
+        Usuario usuario = this.convertPModel(usuarioDTO);
         return usuarioRepository.save(usuario);
     }
 
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioLoginDTO loginDTO) {
         Optional<Usuario> usuarioBuscado =
-                usuarioRepository.findByNome(loginDTO.getNome());
+                usuarioRepository.findByNome(loginDTO.nome());
 
         if (usuarioBuscado.isPresent()) {
             Usuario usuario = usuarioBuscado.get();
-            if (usuario.getSenha().equals(loginDTO.senha()))
-                return ResponseEntity.ok(modelMapper.map(usuario,
-                        UsuarioDTO.class));
-        }
+            if (usuario.getSenha().equals(loginDTO.senha())) {
+                UsuarioDTO usuarioDTO = this.convertPDTO(usuario);
+                return ResponseEntity.ok(usuarioDTO);
+            }
 
+        }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Credenciais inválidas");
+    }
+
+    private Usuario convertPModel(UsuarioNovoDTO usuarioDTO) {
+        Usuario usuario = new Usuario();
+        usuario.setSenha(usuarioDTO.senha());
+        usuario.setNome(usuarioDTO.nome());
+        usuario.setAdmin(usuarioDTO.admin());
+        return usuario;
+    }
+
+    private UsuarioDTO convertPDTO(Usuario usuario) {
+        UsuarioDTO usuarioDTO = new UsuarioDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.isAdmin());
+        return usuarioDTO;
     }
 
 }

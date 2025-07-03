@@ -1,8 +1,9 @@
 package com.example.servidorback.DTO;
 
-public record UsuarioDTO(
+public record UsuarioNovoDTO(
         long id,
         String nome,
-        boolean admin
+        boolean admin,
+        String senha
 ) {
 }

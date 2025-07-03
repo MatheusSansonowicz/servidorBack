@@ -29,7 +29,7 @@ public class ProdutoController {
 
     @PostMapping ("/novo")
     public Produto criar(@RequestBody ProdutoDTO npDTO) {
-        Produto produto = modelMapper.map(npDTO, Produto.class);
+        Produto produto = this.converterParaProduto(npDTO);
         return produtoRepository.save(produto);
     }
 
@@ -66,11 +66,31 @@ public class ProdutoController {
     }
 
     private ProdutoDTO converterParaDTO(Produto produto) {
+        ProdutoDTO produtoDTO = new ProdutoDTO(produto.getNome(),
+                produto.getDescricao(),
+                produto.getCategoria(),
+                produto.getPreco(),
+                produto.isDisponibilidade(),
+                produto.getImagem()
+        );
         return modelMapper.map(produto, ProdutoDTO.class);
     }
+//    String nome,
+//    String descricao,
+//    String categoria,
+//    double preco,
+//    boolean disponibilidade,
+//    String imagem
 
     private Produto converterParaProduto(ProdutoDTO produtoDTO) {
-        return modelMapper.map(produtoDTO, Produto.class);
+        Produto produto = new Produto();
+        produto.setNome(produtoDTO.nome());
+        produto.setDisponibilidade(produtoDTO.disponibilidade());
+        produto.setCategoria(produtoDTO.categoria());
+        produto.setPreco(produtoDTO.preco());
+        produto.setDescricao(produtoDTO.descricao());
+        produto.setImagem(produtoDTO.imagem());
+        return produtoRepository.save(produto);
     }
 
 }
