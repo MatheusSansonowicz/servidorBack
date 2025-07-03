@@ -6,7 +6,8 @@ import java.util.List;
 
 public record CarrinhoDTO(
         Long id,
-        List<ProdutoNoCarrinho> produtos,
-        double precoFinal
+        List<ProdutoNoCarrinhoDTO> produtos,
+        double precoFinal,
+        UsuarioDTO pedinte
 ) {
 }

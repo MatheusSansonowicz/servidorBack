@@ -2,7 +2,9 @@ package com.example.servidorback.controller;
 
 
 import com.example.servidorback.DTO.CarrinhoDTO;
+import com.example.servidorback.DTO.ProdutoDTO;
 import com.example.servidorback.model.Carrinho;
+import com.example.servidorback.model.ProdutoNoCarrinho;
 import com.example.servidorback.repository.CarrinhoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,4 +49,5 @@ public class CarrinhoController {
         carrinho.setId(id);
         return carrinhoRepository.save(carrinho);
     }
+
 }
