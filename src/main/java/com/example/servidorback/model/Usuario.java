@@ -21,4 +21,6 @@ public class Usuario {
 
     @OneToMany(mappedBy = "pedinte")
     private List<Carrinho> carrinhos;
+
+    String mod;
 }
